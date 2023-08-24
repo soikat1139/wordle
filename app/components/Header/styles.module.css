@@ -1,0 +1,16 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Roboto:ital,wght@1,300&family=Slabo+27px&display=swap');
+
+.header{
+   display: flex;
+
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+   /* border: 2px solid red; */
+   height: 70px;
+   font-family: 'Black Ops One', cursive;
+   font-size: 20px;
+   border-bottom: 2px solid rgba(0,0,0,0.3);
+}
