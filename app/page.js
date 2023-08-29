@@ -4,12 +4,27 @@
  
 import React, { useState, useEffect } from 'react'
 import Board from "./components/Body/Board"
+import {words} from "./data/words"
+import Keyboard from './components/keyboard/keyboard'
+import { Roboto } from 'next/font/google'
+ 
+const roboto = Roboto({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+})
+
+
+import { Black_Ops_One } from 'next/font/google'
+ 
+export const black_Ops_One=Black_Ops_One({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap'
+})
 
 
 
-
-
-const words=["ALBUM","HINGE","MONEY","SCRAP","GAMER","GLASS","SCOUR","BEING","DELVE","YIELD","METAL","TIPSY","SLUNG","FARCE","GECKO","SHINE","CANNY","MIDST","BADGE","HOMER","TRAIN","STORY","HAIRY","FORGO","LARVA","TRASH","ZESTY","SHOWN","HEIST","ASKEW","INERT","OLIVE","PLANT","OXIDE","CARGO","FOYER","FLAIR","AMPLE","CHEEK","SHAME","MINCE","CHUNK","ROYAL","SQUAD","BLACK","STAIR","SCARE","FORAY","COMMA","NATAL","SHAWL","FEWER","TROPE","SNOUT","LOWLY","STOVE","SHALL","FOUND","NYMPH","EPOXY","DEPOT","CHEST","PURGE","SLOSH","THEIR","RENEW","ALLOW","SAUTE","MOVIE","CATER","TEASE","SMELT","FOCUS","TODAY","WATCH","LAPSE","MONTH","SWEET","HOARD","CLOTH","BRINE","AHEAD","MOURN","NASTY","RUPEE","CHOKE","CHANT","SPILL","VIVID","BLOKE","TROVE","THORN","OTHER","TACIT","SWILL","DODGE","SHAKE","CAULK","AROMA","CYNIC","ROBIN","ULTRA","ULCER","PAUSE","HUMOR","FRAME","ELDER","SKILL","ALOFT","PLEAT","SHARD","MOIST","THOSE","LIGHT","WRUNG","COULD","PERKY","MOUNT","WHACK","SUGAR","KNOLL","CRIMP","WINCE","PRICK","ROBOT","POINT","PROXY","SHIRE","SOLAR","PANIC","TANGY","ABBEY","FAVOR","DRINK","QUERY","GORGE","CRANK","SLUMP","BANAL","TIGER","SIEGE","TRUSS","BOOST","REBUS","UNIFY","TROLL","TAPIR","ASIDE","FERRY","ACUTE","PICKY","WEARY","GRIPE","CRAZE","PLUCK","BRAKE","BATON","CHAMP","PEACH","USING","TRACE","VITAL","SONIC","MASSE","CONIC","VIRAL","RHINO","BREAK","TRIAD","EPOCH","USHER","EXULT","GRIME","CHEAT","SOLVE","BRING","PROVE","STORE","TILDE","CLOCK","WROTE","RETCH","PERCH","ROUGE","RADIO","SURER","FINER","VODKA","HERON","CHILL","GAUDY","PITHY","SMART","BADLY","ROGUE","GROUP","FIXER","GROIN","DUCHY","COAST","BLURT","PULPY","ALTAR","GREAT","BRIAR","CLICK","GOUGE","WORLD","ERODE","BOOZY","DOZEN","FLING","GROWL","ABYSS","STEED","ENEMA","JAUNT","COMET","TWEED","PILOT","DUTCH","BELCH","OUGHT","DOWRY","THUMB","HYPER","HATCH","ALONE","MOTOR","ABACK","GUILD","KEBAB","SPEND","FJORD","ESSAY","SPRAY","SPICY","AGATE","SALAD","BASIC","MOULT","CORNY","FORGE","CIVIC","ISLET","LABOR","GAMMA","LYING","AUDIT","ROUND","LOOPY","LUSTY","GOLEM","GONER","GREET","START","LAPEL","BIOME","PARRY","SHRUB","FRONT","WOOER","TOTEM","FLICK","DELTA","BLEED","ARGUE","SWIRL","ERROR","AGREE","OFFAL","FLUME","CRASS","PANEL","STOUT","BRIBE","DRAIN","YEARN","PRINT","SEEDY","IVORY","BELLY","STAND","FIRST","FORTH","BOOBY","FLESH","UNMET","LINEN","MAXIM","POUND","MIMIC","SPIKE","CLUCK","CRATE","DIGIT","REPAY","SOWER","CRAZY","ADOBE","OUTDO","TRAWL","WHELP","UNFED","PAPER","STAFF","CROAK","HELIX","FLOSS","PRIDE","BATTY","REACT","MARRY","ABASE","COLON","STOOL","CRUST","FRESH","DEATH","MAJOR","FEIGN","ABATE","BENCH","QUIET","GRADE","STINK","KARMA","MODEL","DWARF","HEATH","SERVE","NAVAL","EVADE","FOCAL","BLUSH","AWAKE","HUMPH","SISSY","REBUT","CIGAR"]
 
 
 
@@ -33,7 +48,7 @@ export default function Home() {
   const[demoGuess,setDemoGuess]=useState([])
 
   const [currentGuess,setCurrentGuess]=useState('')
-  const [isEvaluate,setEvaluate]=useState(false)
+  
   const [word,setWord]=useState("")
  
   useEffect(()=>{
@@ -41,18 +56,54 @@ export default function Home() {
     setWord(words[Math.floor(Math.random()*words.length)].toLowerCase())
 
   },[])
-
   console.log(word)
+
+ 
 
 
 
 
   function isAlphabet(character) {
+
+    if(character.length>1){
+      return false
+    }
+
     // Convert the character to uppercase to handle both cases
     const uppercaseChar = character.toUpperCase();
     
     // Check if the character is between 'A' and 'Z' in the ASCII table
     return uppercaseChar >= 'A' && uppercaseChar <= 'Z';
+  }
+
+  async function wordCheck(word){
+    
+        var myHeaders = new Headers();
+        myHeaders.append("apikey", "6QZ7utRWlPaZ4Ct1hN55Vu0JoyvejvSj");
+
+        var requestOptions = {
+          method: 'GET',
+          redirect: 'follow',
+          headers: myHeaders
+        };
+        try{
+         const response=await fetch(`https://api.apilayer.com/spell/spellchecker?q=${word}`, requestOptions)
+         const result=await response.json()
+        //  console.log(result.corrections.length)
+        // console.log(result)
+        return result.corrections.length>0
+
+
+        }
+        catch{
+          return false
+        }
+
+        
+
+          // .then(response => response.text())
+          // .then(result => console.log(result))
+          // .catch(error => console.log('error', error));
   }
 
 
@@ -62,15 +113,27 @@ export default function Home() {
 
   
   useEffect(() => {
-    function onKeyPressed(e) {
+
+    async function onKeyPressed(e) {
+
+
+
+    
       if (e.key === "Enter") {
         
-        console.log(currentGuess.length)
-        if (
-          guesses.length < maxGuess &&
-          !guesses.includes(word) &&
+        
+       
+          
+        if (guesses.length < maxGuess &&
+          !guesses.includes(currentGuess) &&
           currentGuess.length === word.length
         ) {
+          if(await wordCheck(currentGuess)){
+            return
+  
+          }
+
+
           setGuesses((prevGuesses) => [...prevGuesses, currentGuess]);
           
           setCurrentGuess("");
@@ -83,6 +146,10 @@ export default function Home() {
 
         }
       } else if (isAlphabet(e.key)) {
+        if(guesses.includes(word)){
+          return
+        }
+
         if (currentGuess.length > 4) {
           return;
         }
@@ -104,13 +171,10 @@ export default function Home() {
 
   }, [word, guesses, currentGuess,setDemoGuess]);
 
-  console.log(currentGuess)
-  console.log(demoGuess)
+  // console.log(currentGuess)
+  // console.log(demoGuess)
 
 
-  if(guesses.includes(word)){
-    return <div>You Have Guessed It My Boy</div>
-  }
 
 
 
@@ -119,7 +183,15 @@ export default function Home() {
   return (
     <div>
      
-     <Board guesses={demoGuess} word={word} oGuess={guesses}/>
+      <Board guesses={demoGuess} word={word} oGuess={guesses}/>
+
+  
+     
+     
+
+    
+     
+     <Keyboard/>
   
      
     </div>
