@@ -1,11 +1,10 @@
 
-"use client"
 
 import { Inter } from 'next/font/google'
-import Header from './components/Header/Header'
+
 import "./globals.css"
 import Link from 'next/link'
-import Sidebar from './components/sideBar/Sidebar'
+
 
 import { useState } from 'react'
 
@@ -37,22 +36,6 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
 
-  const [isSidebar,setIsSideBar]=useState(false)
-
-
-  function setSide(value){
-    console.log(value)
-    setIsSideBar(value)
-
-  }
-
-
-
-
-
-
-
-
 
 
 
@@ -61,10 +44,7 @@ export default function RootLayout({ children }) {
       {/* <Link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet"/>  */}
       
       <body >
-        <Header setSide={setSide}/>
-        {
-          isSidebar && <Sidebar/>
-        }
+     
         
         <div>
         {children}

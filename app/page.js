@@ -7,6 +7,8 @@ import Board from "./components/Body/Board"
 import {words} from "./data/words"
 import Keyboard from './components/keyboard/keyboard'
 import { Roboto } from 'next/font/google'
+import Header from './components/Header/Header'
+import Sidebar from './components/sideBar/Sidebar'
  
 const roboto = Roboto({
   weight: '400',
@@ -50,6 +52,7 @@ export default function Home() {
   const [currentGuess,setCurrentGuess]=useState('')
   
   const [word,setWord]=useState("")
+  const [isSidebar,setIsSideBar]=useState(false)
 
   
  
@@ -259,7 +262,11 @@ export default function Home() {
 
 
 
+  function setSide(value){
+    
+    setIsSideBar(value)
 
+  }
 
 
 
@@ -267,6 +274,10 @@ export default function Home() {
 
   return (
     <div>
+         <Header setSide={setSide}/>
+        {
+          isSidebar && <Sidebar/>
+        }
      
       <Board guesses={demoGuess} word={word} oGuess={guesses}/>
 
