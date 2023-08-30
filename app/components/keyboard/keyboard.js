@@ -19,10 +19,10 @@ export default function Keyboard({change,word,guesses}) {
         const tempObj={}
         let count=0
         function checkSim(char,idx,arr){
-            console.log(char)
-            console.log(idx)
-            console.log(arr)
-            console.log("Checking")
+            // console.log(char)
+            // console.log(idx)
+            // console.log(arr)
+            // console.log("Checking")
     
             const splitSolution=word.toLowerCase().split("")
     
@@ -85,7 +85,7 @@ export default function Keyboard({change,word,guesses}) {
     
         for(let words of guesses){
             const splitWord=words.toLowerCase().split("")
-            console.log(splitWord)
+            // console.log(splitWord)
     
             for(let i=0;i<splitWord.length;i++){
     
@@ -98,7 +98,7 @@ export default function Keyboard({change,word,guesses}) {
         }
 
         if(count===guesses.length){
-            console.log("hELLO")
+            
             setClsNames(tempObj)
         }
 
@@ -115,7 +115,7 @@ export default function Keyboard({change,word,guesses}) {
 
 
 
-    console.log(clsNames)
+    // console.log(clsNames)
 
 
 

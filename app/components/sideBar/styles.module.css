@@ -1,0 +1,51 @@
+
+.sidebar{
+
+    height: 30rem;
+    position: absolute;
+    /* border: 2px solid black;
+    border-top: 0px;
+    border-left: 0px; */
+
+    left: 2px;
+    box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.1),
+            -8px -8px 16px rgba(255, 255, 255, 0.5);
+    
+
+    width: 18rem;
+
+
+}
+
+.footer{
+    position: relative;
+    top:26rem;
+    display:flex ;
+    flex-direction: column;
+
+}
+.line{
+    height: 2px;
+    width: 100%;
+    background-color:black ;
+    margin-bottom: 10px;
+}
+.btns{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+
+}
+.btn{
+    height: 35px;
+    width: 120px;
+    text-align: center;
+    color: #ffff;
+    background-color: black;
+    border: 2px solid black;
+    margin-left:3px;
+    cursor: pointer;
+
+}

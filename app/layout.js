@@ -1,8 +1,13 @@
 
+"use client"
+
 import { Inter } from 'next/font/google'
 import Header from './components/Header/Header'
 import "./globals.css"
 import Link from 'next/link'
+import Sidebar from './components/sideBar/Sidebar'
+
+import { useState } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 import { Roboto } from 'next/font/google'
@@ -31,12 +36,29 @@ export const metadata = {
 
 
 export default function RootLayout({ children }) {
+
+  const [isSidebar,seIsSideBar]=useState(true)
+
+
+
+
+
+
+
+
+
+
+
   return (
     <html lang="en"   className={black_Ops_One.className}>
       {/* <Link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet"/>  */}
       
       <body >
         <Header />
+        {
+          isSidebar && <Sidebar/>
+        }
+        
         <div>
         {children}
 

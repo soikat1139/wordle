@@ -50,6 +50,8 @@ export default function Home() {
   const [currentGuess,setCurrentGuess]=useState('')
   
   const [word,setWord]=useState("")
+
+  
  
   useEffect(()=>{
     
@@ -77,6 +79,15 @@ export default function Home() {
   }
 
   async function wordCheck(word){
+    console.log(word)
+    
+    if(!word.length>0){
+      return true
+    }
+    
+
+
+
     
         var myHeaders = new Headers();
         myHeaders.append("apikey", "6QZ7utRWlPaZ4Ct1hN55Vu0JoyvejvSj");
@@ -90,13 +101,15 @@ export default function Home() {
          const response=await fetch(`https://api.apilayer.com/spell/spellchecker?q=${word}`, requestOptions)
          const result=await response.json()
         //  console.log(result.corrections.length)
-        // console.log(result)
+        console.log(result)
+        console.log("Hello")
         return result.corrections.length>0
 
 
         }
         catch{
-          return false
+          console.log("Hello")
+          return true
         }
 
         
@@ -114,32 +127,40 @@ export default function Home() {
   
   useEffect(() => {
 
-    async function onKeyPressed(e) {
+    let apiCallInProgress = false;
 
+    async function onKeyPressed(e) {
+      console.log(e.key)
+
+      
+      
 
 
     
-      if (e.key === "Enter") {
-        
-        
-       
-          
+      if (e.key === "Enter" && !apiCallInProgress) {
         if (guesses.length < maxGuess &&
-          !guesses.includes(currentGuess) &&
-          currentGuess.length === word.length
+            !guesses.includes(currentGuess) &&
+            currentGuess.length === word.length
         ) {
-          if(await wordCheck(currentGuess)){
-            return
-  
+          try {
+            apiCallInProgress = true;
+
+            if (await wordCheck(currentGuess)) {
+              return;
+            }
+    
+            setGuesses((prevGuesses) => [...prevGuesses, currentGuess]);
+            setCurrentGuess("");
+          } finally {
+            apiCallInProgress = false;
           }
-
-
-          setGuesses((prevGuesses) => [...prevGuesses, currentGuess]);
-          
-          setCurrentGuess("");
-
         }
-      } else if (e.key === "Backspace") {
+      }
+    
+
+
+
+      else if (e.key === "Backspace") {
         if (currentGuess.length > 0) {
           setCurrentGuess((prevGuess) => prevGuess.slice(0, -1));
           setDemoGuess([...guesses,currentGuess.slice(0, -1)])
@@ -173,10 +194,65 @@ export default function Home() {
 
   // console.log(currentGuess)
   // console.log(demoGuess)
+  let apiCallInProgress = false;
+
+  async function screenKeyBoard(char){
+    
+
+    
+
+    if (char === "Enter" && !apiCallInProgress) {
+        
+        
+       
+          
+      if (guesses.length < maxGuess &&
+        !guesses.includes(currentGuess) &&
+        currentGuess.length === word.length
+      ) {
+        try{
+          apiCallInProgress = true;
+        if(await wordCheck(currentGuess)){
+          return
+
+        }
+
+        setGuesses((prevGuesses) => [...prevGuesses, currentGuess]);
+        
+        setCurrentGuess("");
+
+      } finally {
+        apiCallInProgress = false;
+      }
 
 
-  function screenKeyBoard(char){
-    console.log(char)
+
+
+      }
+    }
+    
+    
+    else if (char === "BackSpace") {
+      if (currentGuess.length > 0) {
+        setCurrentGuess((prevGuess) => prevGuess.slice(0, -1));
+        setDemoGuess([...guesses,currentGuess.slice(0, -1)])
+
+      }
+    } else if (isAlphabet(char)) {
+      if(guesses.includes(word)){
+        return
+      }
+
+      if (currentGuess.length > 4) {
+        return;
+      }
+      else{
+        setCurrentGuess((prev) => prev + char.toLowerCase());
+        setDemoGuess([...guesses,currentGuess+char.toLowerCase()])
+      }
+      
+      
+    }
 
    
   }
@@ -185,7 +261,7 @@ export default function Home() {
 
 
 
-  
+
 
 
 
