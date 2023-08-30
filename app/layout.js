@@ -37,7 +37,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
 
-  const [isSidebar,seIsSideBar]=useState(true)
+  const [isSidebar,setIsSideBar]=useState(false)
+
+
+  function setSide(value){
+    console.log(value)
+    setIsSideBar(value)
+
+  }
 
 
 
@@ -54,7 +61,7 @@ export default function RootLayout({ children }) {
       {/* <Link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet"/>  */}
       
       <body >
-        <Header />
+        <Header setSide={setSide}/>
         {
           isSidebar && <Sidebar/>
         }

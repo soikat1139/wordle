@@ -19,3 +19,9 @@
    text-decoration: none;
    color: black;
 }
+.icon{
+   cursor: pointer;
+}
+.icon:hover{
+   scale: 1.2;
+}
