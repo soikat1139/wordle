@@ -25,3 +25,14 @@
 .icon:hover{
    scale: 1.2;
 }
+
+
+.setting{
+   /* border:2px solid red; */
+   cursor: pointer;
+}
+.setting:hover{
+   /* border:2px solid red; */
+   cursor: pointer;
+   scale: 1.2;
+}

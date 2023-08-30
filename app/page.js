@@ -11,6 +11,7 @@ import Header from './components/Header/Header'
 import Sidebar from './components/sideBar/Sidebar'
 import Toast from "./components/Toast/Toast"
 import Modal from "./components/Modal/modal"
+import Setting from './components/settings/Settings'
  
 const roboto = Roboto({
   weight: '400',
@@ -66,6 +67,8 @@ export default function Home() {
     "heading":"Congratulation !!",
     "message":"You Have Won The Game"
   })
+
+  const [showSetting,setShowSetting]=useState(false)
 
 
   
@@ -146,7 +149,7 @@ export default function Home() {
     let apiCallInProgress = false;
 
     async function onKeyPressed(e) {
-      console.log(e.key)
+      // console.log(e.key)
 
       
       
@@ -328,6 +331,7 @@ export default function Home() {
       "message":"You Have Won The Game"
 
     })
+    setShowSetting(false)
 
 
   }
@@ -353,6 +357,13 @@ export default function Home() {
           "message":`Ans:${word}`
         })
         removeToast(3000)
+
+        setIsModal({
+          "bool":true,
+          "heading":"Opps !!Sorry !!",
+          "message":`The Word You are looking for is : ${word}`
+    
+        })
   
       }
     
@@ -374,6 +385,20 @@ export default function Home() {
   },[guesses,word])
 
 
+  function removeSetting(){
+
+    setShowSetting(false)
+
+
+  }
+  function setting(bool){
+    // console.log("Bool")
+    // console.log(bool)
+    setShowSetting(bool)
+  }
+  // console.log(showSetting)
+
+
 
 
 
@@ -381,7 +406,7 @@ export default function Home() {
 
   return (
     <div>
-         <Header setSide={setSide}/>
+         <Header setSide={setSide} show={setting}/>
         {
           isSidebar && <Sidebar/>
         }
@@ -393,6 +418,10 @@ export default function Home() {
         {
           isModal.bool && <Modal heading={isModal.heading} message={isModal.message} reset={reset}  />
         }
+        {
+          showSetting && <Setting  word={word} remove={removeSetting} reset={reset}  />
+        }
+        
         
      
       <Board guesses={demoGuess} word={word} oGuess={guesses}/>
