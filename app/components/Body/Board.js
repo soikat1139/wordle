@@ -1,6 +1,8 @@
 
 import styles from "./style.module.css"
 
+
+
 export default function Board({guesses,word,oGuess}) {
 
     

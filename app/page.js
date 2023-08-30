@@ -175,6 +175,13 @@ export default function Home() {
   // console.log(demoGuess)
 
 
+  function screenKeyBoard(char){
+    console.log(char)
+
+   
+  }
+
+
 
 
 
@@ -191,7 +198,7 @@ export default function Home() {
 
     
      
-     <Keyboard/>
+     <Keyboard change={screenKeyBoard} word={word} guesses={guesses}/>
   
      
     </div>
