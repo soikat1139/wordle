@@ -2,13 +2,15 @@
 
 'use client'
  
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import Board from "./components/Body/Board"
 import {words} from "./data/words"
 import Keyboard from './components/keyboard/keyboard'
 import { Roboto } from 'next/font/google'
 import Header from './components/Header/Header'
 import Sidebar from './components/sideBar/Sidebar'
+import Toast from "./components/Toast/Toast"
+import Modal from "./components/Modal/modal"
  
 const roboto = Roboto({
   weight: '400',
@@ -35,7 +37,7 @@ export const black_Ops_One=Black_Ops_One({
 
 // words[Math.floor(Math.random() * words.length)].toLowerCase()
 
-const maxGuess=7
+const maxGuess=6
 
 const wordLength=5
 
@@ -53,6 +55,18 @@ export default function Home() {
   
   const [word,setWord]=useState("")
   const [isSidebar,setIsSideBar]=useState(false)
+
+  const [isToast,setIsToast]=useState({"bool":false,
+"message":"Hello There"})
+
+  const timeout=useRef(0)
+
+  const [isModal,setIsModal]=useState({
+    "bool":false,
+    "heading":"Congratulation !!",
+    "message":"You Have Won The Game"
+  })
+
 
   
  
@@ -104,14 +118,13 @@ export default function Home() {
          const response=await fetch(`https://api.apilayer.com/spell/spellchecker?q=${word}`, requestOptions)
          const result=await response.json()
         //  console.log(result.corrections.length)
-        console.log(result)
-        console.log("Hello")
+       
         return result.corrections.length>0
 
 
         }
         catch{
-          console.log("Hello")
+          
           return true
         }
 
@@ -141,7 +154,7 @@ export default function Home() {
 
     
       if (e.key === "Enter" && !apiCallInProgress) {
-        if (guesses.length < maxGuess &&
+        if (guesses.length <= maxGuess &&
             !guesses.includes(currentGuess) &&
             currentGuess.length === word.length
         ) {
@@ -149,6 +162,11 @@ export default function Home() {
             apiCallInProgress = true;
 
             if (await wordCheck(currentGuess)) {
+              setIsToast({
+                "bool":true,
+                "message":"Not A Word"
+              })
+              removeToast(1500)
               return;
             }
     
@@ -158,6 +176,14 @@ export default function Home() {
             apiCallInProgress = false;
           }
         }
+
+
+     
+
+
+
+
+
       }
     
 
@@ -199,6 +225,25 @@ export default function Home() {
   // console.log(demoGuess)
   let apiCallInProgress = false;
 
+
+  function removeToast(ms){
+
+    clearTimeout(timeout.current)
+
+    timeout.current=setTimeout(()=>{
+      setIsToast({
+        "bool":false,
+        "message":"Hello There"
+      })
+
+
+
+    },ms)
+
+
+
+  }
+
   async function screenKeyBoard(char){
     
 
@@ -209,13 +254,18 @@ export default function Home() {
         
        
           
-      if (guesses.length < maxGuess &&
+      if (guesses.length <= maxGuess &&
         !guesses.includes(currentGuess) &&
         currentGuess.length === word.length
       ) {
         try{
           apiCallInProgress = true;
         if(await wordCheck(currentGuess)){
+          setIsToast({
+            "bool":true,
+            "message":"Not A Word"
+          })
+          removeToast(1500)
           return
 
         }
@@ -232,6 +282,10 @@ export default function Home() {
 
 
       }
+
+  
+
+
     }
     
     
@@ -262,11 +316,64 @@ export default function Home() {
 
 
 
+
+  function reset(){
+    setGuesses([])
+    setDemoGuess([])
+    setCurrentGuess("")
+    setWord(words[Math.floor(Math.random()*words.length)].toLowerCase())
+    setIsModal({
+      "bool":false,
+      "heading":"Congratulation !!",
+      "message":"You Have Won The Game"
+
+    })
+
+
+  }
+
+
+
+
+
+
   function setSide(value){
     
     setIsSideBar(value)
+    
 
   }
+
+
+  useEffect(()=>{
+    if(guesses.length === maxGuess){
+      if(!guesses.includes(word)){
+        setIsToast({
+          "bool":true,
+          "message":`Ans:${word}`
+        })
+        removeToast(3000)
+  
+      }
+    
+  
+  
+    }
+
+    if(guesses.includes(word)){
+      setIsModal({
+        "bool":true,
+        "heading":"Congratulation !!",
+        "message":"You Have Won The Game"
+  
+      })
+
+    }
+
+
+  },[guesses,word])
+
+
 
 
 
@@ -278,6 +385,15 @@ export default function Home() {
         {
           isSidebar && <Sidebar/>
         }
+
+        {
+          isToast.bool && <Toast  message={isToast.message}/>
+        }
+
+        {
+          isModal.bool && <Modal heading={isModal.heading} message={isModal.message} reset={reset}  />
+        }
+        
      
       <Board guesses={demoGuess} word={word} oGuess={guesses}/>
 

@@ -6,6 +6,7 @@
     /* border: 2px solid black;
     border-top: 0px;
     border-left: 0px; */
+    z-index: 10;
 
     left: 2px;
     box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.1),
@@ -13,9 +14,45 @@
     
 
     width: 18rem;
+    background-color: #ffff;
+    animation-name: slide-in;
+    animation-duration: 3s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    transition-property: background-color;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
 
 
 }
+
+@keyframes  side-in {
+
+    0% {
+        transform: translateX(-500px);
+    }
+    25% {
+        transform: translateX(-300px);
+    }
+    50% {
+        transform: translateX(-300px);
+    }
+    75% {
+        transform: translateX(-100px);
+    }
+    90% {
+        transform: translateX(-50px);
+    }
+    100% {
+        transform: translateX(500);
+    }
+}
+
+
+    
+
 
 .footer{
     position: relative;
