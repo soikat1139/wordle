@@ -28,6 +28,10 @@ export const black_Ops_One=Black_Ops_One({
   display: 'swap'
 })
 
+function testFunction(){
+  return "All is Okay"
+}
+
 
 
 
